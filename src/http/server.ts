@@ -1,5 +1,10 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from "http";
-import { type NoxPath, type RouteHandler, Router } from "./router.js";
+import {
+  type NoxPath,
+  type RouteHandler,
+  type RouteMethod,
+  Router,
+} from "./router.js";
 
 export class Nox {
   private readonly server: Server;
@@ -11,7 +16,7 @@ export class Nox {
   }
 
   private handleRequest(req: IncomingMessage, res: ServerResponse) {
-    const route = this.router.math(req.method, req.url);
+    const route = this.router.match(req.method as RouteMethod, req.url);
 
     if (!route) {
       res.writeHead(404);
@@ -25,6 +30,23 @@ export class Nox {
   public get(path: NoxPath, handler: RouteHandler): void {
     this.router.get(path, handler);
   }
+
+  public post(path: NoxPath, handler: RouteHandler): void {
+    this.router.post(path, handler);
+  }
+
+  public put(path: NoxPath, handler: RouteHandler): void {
+    this.router.put(path, handler);
+  }
+
+  public patch(path: NoxPath, handler: RouteHandler): void {
+    this.router.patch(path, handler);
+  }
+
+  public delete(path: NoxPath, handler: RouteHandler): void {
+    this.router.delete(path, handler);
+  }
+
   public listen(port?: number) {
     this.server.listen(port);
   }
