@@ -5,10 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx --watch examples/app/app.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "example": "tsx examples/app/app.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

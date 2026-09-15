@@ -21,7 +21,7 @@ install: ## Установить зависимости через pnpm
 	$(PNPM) install
 
 .PHONY: dev
-dev: ## Запустить проект в dev-режиме (tsx watch)
+dev: ## Запустить пример (examples/app/app.ts)
 	$(PNPM) dev
 
 .PHONY: build
@@ -31,10 +31,6 @@ build: ## Собрать проект через TypeScript
 .PHONY: start
 start: ## Запустить собранный проект
 	$(PNPM) start
-
-.PHONY: example
-example: ## Запустить пример (examples/app/app.ts)
-	$(PNPM) example
 
 .PHONY: test
 test: ## Запустить тесты
