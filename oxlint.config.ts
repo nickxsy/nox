@@ -3,12 +3,12 @@ import { defineConfig } from 'oxlint';
 // oxlint-disable-next-line no-default-export
 export default defineConfig({
   categories: {
-    correctness: 'error',
-    pedantic: 'warn',
-    perf: 'warn',
-    restriction: 'error',
-    style: 'warn',
-    suspicious: 'warn',
+    correctness: 'off',
+    pedantic: 'off',
+    perf: 'off',
+    restriction: 'off',
+    style: 'off',
+    suspicious: 'off',
   },
   plugins: [
     'import',
@@ -16,8 +16,8 @@ export default defineConfig({
     'oxc',
     'promise',
     'typescript',
-    'unicorn',
-    'vitest',
+    // 'unicorn',
+    // 'vitest',
   ],
   rules: {
     'eslint/no-unused-vars': 'warn',

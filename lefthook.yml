@@ -1,12 +1,12 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
-      glob: '*.{ts,tsx}'
-      run: pnpm lint
-    format:
-      glob: '*.{ts,tsx}'
+    formatting:
+      glob: '*.{js,ts,jsx,tsx,md,mdx,json,yml}'
       run: pnpm fmt:check
+    lint:
+      glob: '*.{js,ts,jsx,tsx}'
+      run: pnpm lint
 
 pre-push:
   commands:

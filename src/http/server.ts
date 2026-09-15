@@ -6,7 +6,7 @@ import type { NoxPath, RouteHandler, RouteMethod } from './router.js';
 
 const NOT_FOUND_CODE = 404;
 
-class Nox {
+export class Nox {
   private readonly server: Server;
   private readonly router: Router;
 

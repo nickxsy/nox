@@ -5,11 +5,9 @@ export function matchPath(
   path2: string,
 ): Record<string, string> | undefined {
   const SEPARATOR = sep,
-
-   v1 = path.split(SEPARATOR),
-   v2 = path2.split(SEPARATOR),
-
-   params: Record<string, string> = {};
+    v1 = path.split(SEPARATOR),
+    v2 = path2.split(SEPARATOR),
+    params: Record<string, string> = {};
 
   if (v1.length !== v2.length) {
     return;
@@ -17,7 +15,7 @@ export function matchPath(
 
   for (let i = 0; i < v1.length; i++) {
     const routeSegment = v1[i],
-     urlSegment = v2[i];
+      urlSegment = v2[i];
 
     if (!routeSegment || !urlSegment) {
       continue;

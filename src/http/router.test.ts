@@ -1,12 +1,10 @@
-import { expect, test } from '@jest/globals';
-
+import { expect, test } from 'vitest';
 
 import { Router } from './router.js';
 
 test('matches GET route', () => {
   const router = new Router(),
-
-   handler = () => {};
+    handler = () => {};
   router.get('/posts', handler);
   const route = router.match('GET', '/posts');
 
@@ -22,7 +20,7 @@ test('matches GET route', () => {
 
 test('does not match route with different method', () => {
   const router = new Router(),
-   handler = () => {};
+    handler = () => {};
   router.get('/posts', handler);
 
   const route = router.match('POST', '/posts');
@@ -32,7 +30,7 @@ test('does not match route with different method', () => {
 
 test('does not match unknown path', () => {
   const router = new Router(),
-   handler = () => {};
+    handler = () => {};
   router.get('/posts', handler);
 
   const route = router.match('GET', '/users');
@@ -42,7 +40,7 @@ test('does not match unknown path', () => {
 
 test('ignores query string when matching route', () => {
   const router = new Router(),
-   handler = () => {};
+    handler = () => {};
   router.get('/posts', handler);
 
   const route = router.match('GET', '/posts?page=2');
@@ -59,7 +57,7 @@ test('ignores query string when matching route', () => {
 
 test('matches URL with query string 2', () => {
   const router = new Router(),
-   handler = () => {};
+    handler = () => {};
   router.get('/posts/:postId/comments/:commentId', handler);
 
   const route = router.match('GET', '/posts/1/comments/12');

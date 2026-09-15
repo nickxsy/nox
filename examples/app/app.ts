@@ -3,8 +3,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import { Nox } from '../../src/http/server.js';
 
 const PORT = 8080,
-
- app = new Nox();
+  app = new Nox();
 
 app.get('/users', (req, res) => {
   res.end('Users');

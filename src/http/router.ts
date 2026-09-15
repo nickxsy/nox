@@ -18,7 +18,7 @@ interface Route {
   handler: RouteHandler;
 }
 
-export interface Router {
+export interface IRouter {
   get(path: NoxPath, handler: RouteHandler): void;
   post(path: NoxPath, handler: RouteHandler): void;
   put(path: NoxPath, handler: RouteHandler): void;
@@ -26,7 +26,7 @@ export interface Router {
   delete(path: NoxPath, handler: RouteHandler): void;
 }
 
-export class Router implements Router {
+export class Router implements IRouter {
   private readonly routes: Route[] = [];
 
   public get(path: NoxPath, handler: RouteHandler): void {
