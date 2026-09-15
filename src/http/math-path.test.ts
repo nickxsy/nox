@@ -3,7 +3,7 @@ import { expect, test } from 'vitest';
 import { matchPath } from './math-path.js';
 
 test('matches path route', () => {
-  expect(matchPath('/posts/:id', '/posts/12')).toEqual({
+  expect(matchPath('/posts/:id', '/posts/12')).toStrictEqual({
     id: '12',
   });
 });
@@ -14,9 +14,9 @@ test('matches path route', () => {
       '/posts/:id/comment/author/:authorId',
       '/posts/12/comment/author/12',
     ),
-  ).toEqual({
-    id: '12',
+  ).toStrictEqual({
     authorId: '12',
+    id: '12',
   });
 });
 

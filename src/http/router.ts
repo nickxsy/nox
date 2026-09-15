@@ -7,16 +7,16 @@ export type NoxPath = string;
 
 export type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export type MatchedRoute = {
+export interface MatchedRoute {
   route: Route;
   params: Record<string, string>;
-};
+}
 
-type Route = {
+interface Route {
   method: RouteMethod;
   path: string;
   handler: RouteHandler;
-};
+}
 
 export interface Router {
   get(path: NoxPath, handler: RouteHandler): void;
@@ -31,41 +31,41 @@ export class Router implements Router {
 
   public get(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
+      handler,
       method: 'GET',
       path,
-      handler,
     });
   }
 
   public post(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
+      handler,
       method: 'POST',
       path,
-      handler,
     });
   }
 
   public put(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
+      handler,
       method: 'PUT',
       path,
-      handler,
     });
   }
 
   public patch(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
+      handler,
       method: 'PATCH',
       path,
-      handler,
     });
   }
 
   public delete(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
+      handler,
       method: 'DELETE',
       path,
-      handler,
     });
   }
 
@@ -73,7 +73,9 @@ export class Router implements Router {
     method: RouteMethod | undefined,
     url: string | undefined,
   ): MatchedRoute | undefined {
-    if (!url) return;
+    if (!url) {
+      return;
+    }
 
     const u = new URL(url, 'http://localhost:8080');
 
@@ -86,8 +88,8 @@ export class Router implements Router {
 
       if (params) {
         return {
-          route,
           params,
+          route,
         };
       }
     }

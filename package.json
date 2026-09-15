@@ -14,12 +14,15 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check"
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
   },
   "devDependencies": {
     "@types/node": "^26.5.1",
     "lefthook": "^2.1.14",
     "oxfmt": "^0.68.0",
+    "oxlint": "^1.83.0",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2",
     "vitest": "^5.0.0"

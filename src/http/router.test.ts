@@ -1,27 +1,28 @@
-import { expect, test } from 'vitest';
+import { expect, test } from '@jest/globals';
+
 
 import { Router } from './router.js';
 
 test('matches GET route', () => {
-  const router = new Router();
+  const router = new Router(),
 
-  const handler = () => {};
+   handler = () => {};
   router.get('/posts', handler);
   const route = router.match('GET', '/posts');
 
-  expect(route).toEqual({
+  expect(route).toStrictEqual({
+    params: {},
     route: {
+      handler,
       method: 'GET',
       path: '/posts',
-      handler,
     },
-    params: {},
   });
 });
 
 test('does not match route with different method', () => {
-  const router = new Router();
-  const handler = () => {};
+  const router = new Router(),
+   handler = () => {};
   router.get('/posts', handler);
 
   const route = router.match('POST', '/posts');
@@ -30,8 +31,8 @@ test('does not match route with different method', () => {
 });
 
 test('does not match unknown path', () => {
-  const router = new Router();
-  const handler = () => {};
+  const router = new Router(),
+   handler = () => {};
   router.get('/posts', handler);
 
   const route = router.match('GET', '/users');
@@ -40,38 +41,38 @@ test('does not match unknown path', () => {
 });
 
 test('ignores query string when matching route', () => {
-  const router = new Router();
-  const handler = () => {};
+  const router = new Router(),
+   handler = () => {};
   router.get('/posts', handler);
 
   const route = router.match('GET', '/posts?page=2');
 
-  expect(route).toEqual({
+  expect(route).toStrictEqual({
+    params: {},
     route: {
       handler,
       method: 'GET',
       path: '/posts',
     },
-    params: {},
   });
 });
 
 test('matches URL with query string 2', () => {
-  const router = new Router();
-  const handler = () => {};
+  const router = new Router(),
+   handler = () => {};
   router.get('/posts/:postId/comments/:commentId', handler);
 
   const route = router.match('GET', '/posts/1/comments/12');
 
-  expect(route).toEqual({
+  expect(route).toStrictEqual({
+    params: {
+      commentId: '12',
+      postId: '1',
+    },
     route: {
       handler,
       method: 'GET',
       path: '/posts/:postId/comments/:commentId',
-    },
-    params: {
-      postId: '1',
-      commentId: '12',
     },
   });
 });

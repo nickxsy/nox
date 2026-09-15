@@ -47,3 +47,11 @@ fmt: ## Форматировать код через oxfmt
 .PHONY: fmt-check
 fmt-check: ## Проверить форматирование кода
 	$(PNPM) run fmt:check
+
+.PHONY: lint
+lint: ## Запустить линтер
+	$(PNPM) run lint
+
+.PHONY: lint-fix
+lint-fix: ## Запустить линтер с автоисправлением
+	$(PNPM) run lint:fix

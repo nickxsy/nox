@@ -1,31 +1,25 @@
-import {
-  createServer,
-  IncomingMessage,
-  Server,
-  ServerResponse,
-} from 'node:http';
+import type { IncomingMessage, Server, ServerResponse } from 'node:http';
+import { createServer } from 'node:http';
 
-import {
-  type NoxPath,
-  type RouteHandler,
-  type RouteMethod,
-  Router,
-} from './router.js';
+import { Router } from './router.js';
+import type { NoxPath, RouteHandler, RouteMethod } from './router.js';
 
-export class Nox {
+const NOT_FOUND_CODE = 404;
+
+class Nox {
   private readonly server: Server;
   private readonly router: Router;
 
-  constructor() {
+  public constructor() {
     this.server = createServer((req, res) => this.handleRequest(req, res));
     this.router = new Router();
   }
 
-  private handleRequest(req: IncomingMessage, res: ServerResponse) {
+  private handleRequest(req: IncomingMessage, res: ServerResponse): void {
     const matchedRoute = this.router.match(req.method as RouteMethod, req.url);
 
     if (!matchedRoute) {
-      res.writeHead(404);
+      res.writeHead(NOT_FOUND_CODE);
       res.end('Not Found');
       return;
     }
@@ -53,7 +47,7 @@ export class Nox {
     this.router.delete(path, handler);
   }
 
-  public listen(port?: number) {
+  public listen(port?: number): void {
     this.server.listen(port);
   }
 }
