@@ -1,10 +1,11 @@
-import type { IncomingMessage, ServerResponse } from "node:http";
-import { matchPath } from "./math-path.js";
+import type { IncomingMessage, ServerResponse } from 'node:http';
+
+import { matchPath } from './math-path.js';
 
 export type RouteHandler = (req: IncomingMessage, res: ServerResponse) => void;
 export type NoxPath = string;
 
-export type RouteMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+export type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export type MatchedRoute = {
   route: Route;
@@ -30,7 +31,7 @@ export class Router implements Router {
 
   public get(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
-      method: "GET",
+      method: 'GET',
       path,
       handler,
     });
@@ -38,7 +39,7 @@ export class Router implements Router {
 
   public post(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
-      method: "POST",
+      method: 'POST',
       path,
       handler,
     });
@@ -46,7 +47,7 @@ export class Router implements Router {
 
   public put(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
-      method: "PUT",
+      method: 'PUT',
       path,
       handler,
     });
@@ -54,7 +55,7 @@ export class Router implements Router {
 
   public patch(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
-      method: "PATCH",
+      method: 'PATCH',
       path,
       handler,
     });
@@ -62,7 +63,7 @@ export class Router implements Router {
 
   public delete(path: NoxPath, handler: RouteHandler): void {
     this.routes.push({
-      method: "DELETE",
+      method: 'DELETE',
       path,
       handler,
     });
@@ -74,7 +75,7 @@ export class Router implements Router {
   ): MatchedRoute | undefined {
     if (!url) return;
 
-    const u = new URL(url, "http://localhost:8080");
+    const u = new URL(url, 'http://localhost:8080');
 
     for (const route of this.routes) {
       if (route.method !== method) {

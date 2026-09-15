@@ -1,86 +1,87 @@
-import { expect, test } from "vitest";
-import { Router } from "./router.js";
+import { expect, test } from 'vitest';
 
-test("matches GET route", () => {
+import { Router } from './router.js';
+
+test('matches GET route', () => {
   const router = new Router();
 
   const handler = () => {};
-  router.get("/posts", handler);
-  const route = router.match("GET", "/posts");
+  router.get('/posts', handler);
+  const route = router.match('GET', '/posts');
 
   expect(route).toEqual({
     route: {
-      method: "GET",
-      path: "/posts",
+      method: 'GET',
+      path: '/posts',
       handler,
     },
     params: {},
   });
 });
 
-test("does not match route with different method", () => {
+test('does not match route with different method', () => {
   const router = new Router();
   const handler = () => {};
-  router.get("/posts", handler);
+  router.get('/posts', handler);
 
-  const route = router.match("POST", "/posts");
+  const route = router.match('POST', '/posts');
 
   expect(route).toBeUndefined();
 });
 
-test("does not match unknown path", () => {
+test('does not match unknown path', () => {
   const router = new Router();
   const handler = () => {};
-  router.get("/posts", handler);
+  router.get('/posts', handler);
 
-  const route = router.match("GET", "/users");
+  const route = router.match('GET', '/users');
 
   expect(route).toBeUndefined();
 });
 
-test("ignores query string when matching route", () => {
+test('ignores query string when matching route', () => {
   const router = new Router();
   const handler = () => {};
-  router.get("/posts", handler);
+  router.get('/posts', handler);
 
-  const route = router.match("GET", "/posts?page=2");
+  const route = router.match('GET', '/posts?page=2');
 
   expect(route).toEqual({
     route: {
       handler,
-      method: "GET",
-      path: "/posts",
+      method: 'GET',
+      path: '/posts',
     },
     params: {},
   });
 });
 
-test("matches URL with query string 2", () => {
+test('matches URL with query string 2', () => {
   const router = new Router();
   const handler = () => {};
-  router.get("/posts/:postId/comments/:commentId", handler);
+  router.get('/posts/:postId/comments/:commentId', handler);
 
-  const route = router.match("GET", "/posts/1/comments/12");
+  const route = router.match('GET', '/posts/1/comments/12');
 
   expect(route).toEqual({
     route: {
       handler,
-      method: "GET",
-      path: "/posts/:postId/comments/:commentId",
+      method: 'GET',
+      path: '/posts/:postId/comments/:commentId',
     },
     params: {
-      postId: "1",
-      commentId: "12",
+      postId: '1',
+      commentId: '12',
     },
   });
 });
 
-test("matches URL with query string 3", () => {
+test('matches URL with query string 3', () => {
   const router = new Router();
 
-  router.get("/posts/:postId/comments/:commentId", () => {});
+  router.get('/posts/:postId/comments/:commentId', () => {});
 
-  const route = router.match("GET", "/users/1/comments/12");
+  const route = router.match('GET', '/users/1/comments/12');
 
   expect(route).toBeUndefined();
 });

@@ -39,3 +39,11 @@ test: ## Запустить тесты
 .PHONY: test-watch
 test-watch: ## Запустить тесты в watch-режиме
 	$(PNPM) run test:watch
+
+.PHONY: fmt
+fmt: ## Форматировать код через oxfmt
+	$(PNPM) run fmt
+
+.PHONY: fmt-check
+fmt-check: ## Проверить форматирование кода
+	$(PNPM) run fmt:check

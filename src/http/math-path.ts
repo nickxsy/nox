@@ -1,4 +1,4 @@
-import { sep } from "node:path";
+import { sep } from 'node:path';
 
 export function matchPath(
   path: string,
@@ -23,7 +23,7 @@ export function matchPath(
       continue;
     }
 
-    const isParam = routeSegment.startsWith(":");
+    const isParam = routeSegment.startsWith(':');
 
     if (isParam) {
       const paramName = routeSegment.slice(1);

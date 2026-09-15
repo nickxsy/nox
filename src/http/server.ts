@@ -3,13 +3,14 @@ import {
   IncomingMessage,
   Server,
   ServerResponse,
-} from "node:http";
+} from 'node:http';
+
 import {
   type NoxPath,
   type RouteHandler,
   type RouteMethod,
   Router,
-} from "./router.js";
+} from './router.js';
 
 export class Nox {
   private readonly server: Server;
@@ -25,7 +26,7 @@ export class Nox {
 
     if (!matchedRoute) {
       res.writeHead(404);
-      res.end("Not Found");
+      res.end('Not Found');
       return;
     }
 
