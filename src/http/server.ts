@@ -1,4 +1,9 @@
-import { createServer, IncomingMessage, Server, ServerResponse } from "http";
+import {
+  createServer,
+  IncomingMessage,
+  Server,
+  ServerResponse,
+} from "node:http";
 import {
   type NoxPath,
   type RouteHandler,
@@ -16,15 +21,15 @@ export class Nox {
   }
 
   private handleRequest(req: IncomingMessage, res: ServerResponse) {
-    const route = this.router.match(req.method as RouteMethod, req.url);
+    const matchedRoute = this.router.match(req.method as RouteMethod, req.url);
 
-    if (!route) {
+    if (!matchedRoute) {
       res.writeHead(404);
       res.end("Not Found");
       return;
     }
 
-    route.handler(req, res);
+    matchedRoute.route.handler(req, res);
   }
 
   public get(path: NoxPath, handler: RouteHandler): void {

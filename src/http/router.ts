@@ -1,10 +1,15 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { URL } from "node:url";
+import { matchPath } from "./math-path.js";
 
 export type RouteHandler = (req: IncomingMessage, res: ServerResponse) => void;
 export type NoxPath = string;
 
 export type RouteMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
+export type MatchedRoute = {
+  route: Route;
+  params: Record<string, string>;
+};
 
 type Route = {
   method: RouteMethod;
@@ -66,13 +71,24 @@ export class Router implements Router {
   public match(
     method: RouteMethod | undefined,
     url: string | undefined,
-  ): Route | undefined {
+  ): MatchedRoute | undefined {
     if (!url) return;
 
-    const u = new URL(url, "http://localhost:8000");
+    const u = new URL(url, "http://localhost:8080");
 
-    return this.routes.find(
-      (route) => route.method === method && route.path === u.pathname,
-    );
+    for (const route of this.routes) {
+      if (route.method !== method) {
+        continue;
+      }
+
+      const params = matchPath(route.path, u.pathname);
+
+      if (params) {
+        return {
+          route,
+          params,
+        };
+      }
+    }
   }
 }
