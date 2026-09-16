@@ -1,6 +1,5 @@
 import { defineConfig } from 'oxlint';
 
-// oxlint-disable-next-line no-default-export
 export default defineConfig({
   categories: {
     correctness: 'error',
@@ -12,7 +11,13 @@ export default defineConfig({
   },
   overrides: [
     {
-      files: ['oxfmt.config.ts'],
+      files: ['./examples/**'],
+      rules: {
+        'no-console': 'off',
+      },
+    },
+    {
+      files: ['*.config.ts'],
       rules: {
         'import/no-default-export': 'off',
       },
@@ -66,5 +71,7 @@ export default defineConfig({
     'import/no-nodejs-modules': 'off',
     'import/no-unassigned-import': 'off',
     'import/prefer-default-export': 'off',
+    'oxc/no-async-await': 'off',
+    'promise/avoid-new': 'off',
   },
 });
