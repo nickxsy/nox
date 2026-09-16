@@ -9,7 +9,7 @@ app.get('/users', (req, res) => {
   res.end('Users');
 });
 
-async function getPosts(req: IncomingMessage, res: ServerResponse) {
+const getPosts = (_req: IncomingMessage, res: ServerResponse): void => {
   res.end(
     JSON.stringify([
       {
@@ -22,17 +22,17 @@ async function getPosts(req: IncomingMessage, res: ServerResponse) {
       },
     ]),
   );
-}
-async function getPostById(req: IncomingMessage, res: ServerResponse) {
+};
+const getPostById = (_req: IncomingMessage, res: ServerResponse): void => {
   res.end(
     JSON.stringify({
       id: 1,
       title: 'Post title 1',
     }),
   );
-}
+};
 
-async function createPost(req: IncomingMessage, res: ServerResponse) {
+const createPost = (_req: IncomingMessage, res: ServerResponse): void => {
   res.end(
     JSON.stringify([
       {
@@ -45,16 +45,19 @@ async function createPost(req: IncomingMessage, res: ServerResponse) {
       },
     ]),
   );
-}
+};
 
-async function getPostCommentById(req: IncomingMessage, res: ServerResponse) {
+const getPostCommentById = (
+  _req: IncomingMessage,
+  res: ServerResponse,
+): void => {
   res.end(
     JSON.stringify({
       id: 1,
       title: 'Comment title 1',
     }),
   );
-}
+};
 
 app.get('/posts', getPosts);
 app.get('/posts/:id', getPostById);

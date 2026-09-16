@@ -1,14 +1,18 @@
-import type { IncomingMessage, Server, ServerResponse } from 'node:http';
-import { createServer } from 'node:http';
+import {
+  type IncomingMessage,
+  type Server,
+  type ServerResponse,
+  createServer,
+} from 'node:http';
 
 import { Router } from './router.js';
-import type { NoxPath, RouteHandler, RouteMethod } from './router.js';
+import type { IRouter, NoxPath, RouteHandler, RouteMethod } from './types.js';
 
 const NOT_FOUND_CODE = 404;
 
 export class Nox {
   private readonly server: Server;
-  private readonly router: Router;
+  private readonly router: IRouter;
 
   public constructor() {
     this.server = createServer((req, res) => this.handleRequest(req, res));

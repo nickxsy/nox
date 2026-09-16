@@ -1,30 +1,12 @@
-import type { IncomingMessage, ServerResponse } from 'node:http';
-
 import { matchPath } from './math-path.js';
-
-export type RouteHandler = (req: IncomingMessage, res: ServerResponse) => void;
-export type NoxPath = string;
-
-export type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-
-export interface MatchedRoute {
-  route: Route;
-  params: Record<string, string>;
-}
-
-interface Route {
-  method: RouteMethod;
-  path: string;
-  handler: RouteHandler;
-}
-
-export interface IRouter {
-  get(path: NoxPath, handler: RouteHandler): void;
-  post(path: NoxPath, handler: RouteHandler): void;
-  put(path: NoxPath, handler: RouteHandler): void;
-  patch(path: NoxPath, handler: RouteHandler): void;
-  delete(path: NoxPath, handler: RouteHandler): void;
-}
+import type {
+  IRouter,
+  MatchedRoute,
+  NoxPath,
+  Route,
+  RouteHandler,
+  RouteMethod,
+} from './types.js';
 
 export class Router implements IRouter {
   private readonly routes: Route[] = [];
@@ -77,20 +59,18 @@ export class Router implements IRouter {
       return;
     }
 
-    const u = new URL(url, 'http://localhost:8080');
+    const urlObject = new URL(url, 'http://localhost:8080');
 
     for (const route of this.routes) {
-      if (route.method !== method) {
-        continue;
-      }
+      if (route.method === method) {
+        const params = matchPath(route.path, urlObject.pathname);
 
-      const params = matchPath(route.path, u.pathname);
-
-      if (params) {
-        return {
-          params,
-          route,
-        };
+        if (params) {
+          return {
+            params,
+            route,
+          };
+        }
       }
     }
   }
