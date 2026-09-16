@@ -1,65 +1,55 @@
-import type { IncomingMessage, ServerResponse } from 'node:http';
-
+import type { NoxRequest } from '../../src/http/request.js';
+import type { NoxResponse } from '../../src/http/response.js';
 import { Nox } from '../../src/http/server.js';
 
-const PORT = 8080,
-  app = new Nox();
+const PORT = 8080;
+const app = new Nox();
 
 app.get('/users', (req, res) => {
-  res.end('Users');
+  res.text('Users');
 });
 
-const getPosts = (_req: IncomingMessage, res: ServerResponse): void => {
-  res.end(
-    JSON.stringify([
-      {
-        id: 1,
-        title: 'Post title 1',
-      },
-      {
-        id: 2,
-        title: 'Post title 2',
-      },
-    ]),
-  );
-};
-const getPostById = (_req: IncomingMessage, res: ServerResponse): void => {
-  res.end(
-    JSON.stringify({
+const getPosts = async (req: NoxRequest, res: NoxResponse): Promise<void> => {
+  console.log(await req.body());
+  res.json([
+    {
       id: 1,
       title: 'Post title 1',
-    }),
-  );
+    },
+    {
+      id: 2,
+      title: 'Post title 2',
+    },
+  ]);
+};
+const getPostById = (req: NoxRequest, res: NoxResponse): void => {
+  res.json({
+    id: 1,
+    title: 'Post title 1',
+  });
 };
 
-const createPost = (_req: IncomingMessage, res: ServerResponse): void => {
-  res.end(
-    JSON.stringify([
-      {
-        id: 1,
-        title: 'Post title 1',
-      },
-      {
-        id: 2,
-        title: 'Post title 2',
-      },
-    ]),
-  );
-};
-
-const getPostCommentById = (
-  _req: IncomingMessage,
-  res: ServerResponse,
-): void => {
-  res.end(
-    JSON.stringify({
+const createPost = (req: NoxRequest, res: NoxResponse): void => {
+  res.json([
+    {
       id: 1,
-      title: 'Comment title 1',
-    }),
-  );
+      title: 'Post title 1',
+    },
+    {
+      id: 2,
+      title: 'Post title 2',
+    },
+  ]);
 };
 
-app.get('/posts', getPosts);
+const getPostCommentById = (req: NoxRequest, res: NoxResponse): void => {
+  res.json({
+    id: 1,
+    title: 'Comment title 1',
+  });
+};
+
+app.get('/posts', () => getPosts);
 app.get('/posts/:id', getPostById);
 app.get('/posts/:id/comments/:commentId', getPostCommentById);
 app.post('/posts', createPost);
