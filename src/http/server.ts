@@ -1,12 +1,14 @@
 import {
   type IncomingMessage,
-  type Server,
   type ServerResponse,
+  type Server,
   createServer,
 } from 'node:http';
 
+import { NoxRequest } from './request.js';
+import { NoxResponse } from './response.js';
 import { Router } from './router.js';
-import type { IRouter, NoxPath, RouteHandler, RouteMethod } from './types.js';
+import type { IRouter, RoutePath, RouteHandler, RouteMethod } from './types.js';
 
 const NOT_FOUND_CODE = 404;
 
@@ -23,31 +25,37 @@ export class Nox {
     const matchedRoute = this.router.match(req.method as RouteMethod, req.url);
 
     if (!matchedRoute) {
-      res.writeHead(NOT_FOUND_CODE);
-      res.end('Not Found');
+      const response = new NoxResponse(res);
+
+      response.status(NOT_FOUND_CODE);
+      response.text('Not Found');
+
       return;
     }
 
-    matchedRoute.route.handler(req, res);
+    const request = new NoxRequest(req, matchedRoute.params);
+    const response = new NoxResponse(res);
+
+    matchedRoute.route.handler(request, response);
   }
 
-  public get(path: NoxPath, handler: RouteHandler): void {
+  public get(path: RoutePath, handler: RouteHandler): void {
     this.router.get(path, handler);
   }
 
-  public post(path: NoxPath, handler: RouteHandler): void {
+  public post(path: RoutePath, handler: RouteHandler): void {
     this.router.post(path, handler);
   }
 
-  public put(path: NoxPath, handler: RouteHandler): void {
+  public put(path: RoutePath, handler: RouteHandler): void {
     this.router.put(path, handler);
   }
 
-  public patch(path: NoxPath, handler: RouteHandler): void {
+  public patch(path: RoutePath, handler: RouteHandler): void {
     this.router.patch(path, handler);
   }
 
-  public delete(path: NoxPath, handler: RouteHandler): void {
+  public delete(path: RoutePath, handler: RouteHandler): void {
     this.router.delete(path, handler);
   }
 

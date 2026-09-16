@@ -33,7 +33,7 @@ test('calls the matching handler and passes request and response', async () => {
 
   app.get('/posts', (req, res) => {
     receivedUrl = req.url;
-    res.end('posts');
+    res.text('posts');
   });
 
   const response = await supertest(await startServer(app)).get('/posts');
@@ -45,7 +45,7 @@ test('calls the matching handler and passes request and response', async () => {
 
 test('ignores query strings when matching a route', async () => {
   const app = new Nox();
-  app.get('/posts', (_req, res) => res.end('posts'));
+  app.get('/posts', (_req, res) => res.text('posts'));
 
   const response = await supertest(await startServer(app)).get('/posts?page=2');
 
@@ -55,7 +55,7 @@ test('ignores query strings when matching a route', async () => {
 
 test('returns 404 for an unknown route and method', async () => {
   const app = new Nox();
-  app.get('/posts', (_req, res) => res.end('posts'));
+  app.get('/posts', (_req, res) => res.text('posts'));
   const server = await startServer(app);
 
   await supertest(server).get('/users').expect(404, 'Not Found');
@@ -70,7 +70,7 @@ test.each([
   ['DELETE', 'delete'],
 ] as const)('supports the %s route method', async (method, register) => {
   const app = new Nox();
-  app[register]('/resource', (_req, res) => res.end(method));
+  app[register]('/resource', (_req, res) => res.text(method));
 
   const response = await supertest(await startServer(app))[register](
     '/resource',

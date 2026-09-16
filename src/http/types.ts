@@ -1,12 +1,9 @@
-import type { IncomingMessage, ServerResponse } from 'node:http';
+import type { NoxRequest } from './request.js';
+import type { NoxResponse } from './response.js';
 
-interface NoxRequest {
-  body: unknown;
-}
-
-interface NoxResponse {
-  body: unknown;
-}
+type RouteHandler = (req: NoxRequest, res: NoxResponse) => void;
+type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+type RoutePath = string;
 
 interface Route {
   method: RouteMethod;
@@ -15,21 +12,16 @@ interface Route {
 }
 
 interface IRouter {
-  get: (path: NoxPath, handler: RouteHandler) => void;
-  post: (path: NoxPath, handler: RouteHandler) => void;
-  put: (path: NoxPath, handler: RouteHandler) => void;
-  patch: (path: NoxPath, handler: RouteHandler) => void;
-  delete: (path: NoxPath, handler: RouteHandler) => void;
+  get: (path: RoutePath, handler: RouteHandler) => void;
+  post: (path: RoutePath, handler: RouteHandler) => void;
+  put: (path: RoutePath, handler: RouteHandler) => void;
+  patch: (path: RoutePath, handler: RouteHandler) => void;
+  delete: (path: RoutePath, handler: RouteHandler) => void;
   match: (
     method: RouteMethod | undefined,
     url: string | undefined,
   ) => MatchedRoute | undefined;
 }
-
-type RouteHandler = (req: IncomingMessage, res: ServerResponse) => void;
-type NoxPath = string;
-
-type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 interface MatchedRoute {
   route: Route;
@@ -38,11 +30,9 @@ interface MatchedRoute {
 
 export type {
   IRouter,
+  MatchedRoute,
+  RoutePath,
   Route,
   RouteHandler,
-  NoxPath,
   RouteMethod,
-  MatchedRoute,
-  NoxRequest,
-  NoxResponse,
 };
