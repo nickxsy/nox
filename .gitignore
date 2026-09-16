@@ -3,6 +3,8 @@ node_modules/
 jspm_packages/
 web_modules/
 
+TODO.md
+
 # Build and Output Directories
 dist/
 build/
