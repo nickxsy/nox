@@ -55,3 +55,6 @@ lint: ## Запустить линтер
 .PHONY: lint-fix
 lint-fix: ## Запустить линтер с автоисправлением
 	$(PNPM) run lint:fix
+
+.PHONY: check
+check: fmt-check lint ## Проверить форматирование и линтинг кода
