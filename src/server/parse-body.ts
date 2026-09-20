@@ -1,5 +1,7 @@
 import type { IncomingMessage } from 'node:http';
 
+import { badRequest } from './errors.js';
+
 export const parseBody = <T = unknown>(
   req: IncomingMessage,
   body: string,
@@ -7,7 +9,11 @@ export const parseBody = <T = unknown>(
   const contentType = req.headers['content-type'];
 
   if (contentType && contentType.includes('application/json')) {
-    return JSON.parse(body);
+    try {
+      return JSON.parse(body) as T;
+    } catch {
+      throw badRequest('Invalid JSON body');
+    }
   }
 
   return body as T;

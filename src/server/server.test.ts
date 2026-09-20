@@ -62,6 +62,72 @@ test('returns 404 for an unknown route and method', async () => {
   await supertest(server).post('/posts').expect(404, 'Not Found');
 });
 
+test('runs middleware in order and awaits next', async () => {
+  const app = new Nox();
+  const calls: string[] = [];
+
+  app.get(
+    '/middleware',
+    async (_req, _res, next) => {
+      calls.push('before');
+      const continueMiddleware = next;
+      await continueMiddleware();
+      calls.push('after');
+    },
+    (_req, res) => {
+      calls.push('handler');
+      res.text('ok');
+    },
+  );
+
+  await supertest(await startServer(app))
+    .get('/middleware')
+    .expect(200, 'ok');
+  expect(calls).toStrictEqual(['before', 'handler', 'after']);
+});
+
+test('returns 400 for malformed JSON', async () => {
+  const app = new Nox();
+  app.post('/json', async (req, res) => {
+    await req.body();
+    res.text('ok');
+  });
+
+  await supertest(await startServer(app))
+    .post('/json')
+    .set('content-type', 'application/json')
+    .send('{invalid')
+    .expect(400, 'Invalid JSON body');
+});
+
+test('caches the parsed request body', async () => {
+  const app = new Nox();
+  app.post('/body', async (req, res) => {
+    const firstBody = await req.body();
+    const secondBody = await req.body();
+
+    res.json({ same: firstBody === secondBody });
+  });
+
+  await supertest(await startServer(app))
+    .post('/body')
+    .send('body')
+    .expect(200, { same: true });
+});
+
+test('returns 413 when the body exceeds the configured limit', async () => {
+  const app = new Nox({ bodyLimit: 3 });
+  app.post('/limited', async (req, res) => {
+    await req.body();
+    res.text('ok');
+  });
+
+  await supertest(await startServer(app))
+    .post('/limited')
+    .send('more')
+    .expect(413, 'Payload Too Large');
+});
+
 test.each([
   ['GET', 'get'],
   ['POST', 'post'],

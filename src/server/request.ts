@@ -3,11 +3,11 @@ import { type URLSearchParams, URL } from 'node:url';
 
 import { URL_BASE } from './constants.js';
 import { parseBody } from './parse-body.js';
-import { readBody } from './read-body.js';
+import { DEFAULT_BODY_LIMIT, readBody } from './read-body.js';
 
 export class NoxRequest<
   TParams = Record<string, string>,
-  TResBody = unknown,
+  _TResBody = unknown,
   TReqBody = unknown,
   TQuery = URLSearchParams,
 > {
@@ -15,14 +15,18 @@ export class NoxRequest<
   private readonly req: IncomingMessage;
   private readonly urlObject: URL;
   private readonly routeParams: Record<string, string>;
+  private readonly bodyLimit: number;
+  private bodyPromise: Promise<TReqBody> | undefined;
 
   public constructor(
     req: IncomingMessage,
     params: Record<string, string> = {},
+    bodyLimit?: number,
   ) {
     this.req = req;
     this.urlObject = new URL(req.url ?? '/', URL_BASE);
     this.routeParams = params;
+    this.bodyLimit = bodyLimit ?? DEFAULT_BODY_LIMIT;
   }
 
   public get method(): string | undefined {
@@ -53,8 +57,14 @@ export class NoxRequest<
     return this.routeParams as TParams;
   }
 
-  public async body(): Promise<TReqBody> {
-    const body = await readBody(this.req);
+  public body(): Promise<TReqBody> {
+    this.bodyPromise ??= this.readAndParseBody();
+
+    return this.bodyPromise;
+  }
+
+  private async readAndParseBody(): Promise<TReqBody> {
+    const body = await readBody(this.req, this.bodyLimit);
     return parseBody<TReqBody>(this.req, body);
   }
 }

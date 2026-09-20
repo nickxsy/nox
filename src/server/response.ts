@@ -1,10 +1,18 @@
 import type { ServerResponse } from 'node:http';
 
-export class NoxResponse<TBody = unknown> {
+export class NoxResponse<_TBody = unknown> {
   private readonly rawResponse: ServerResponse;
 
   public constructor(rawResponse: ServerResponse) {
     this.rawResponse = rawResponse;
+  }
+
+  public get headersSent(): boolean {
+    return this.rawResponse.headersSent;
+  }
+
+  public get writableEnded(): boolean {
+    return this.rawResponse.writableEnded;
   }
 
   public status(code: number): this {

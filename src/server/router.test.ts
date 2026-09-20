@@ -11,7 +11,7 @@ test('matches GET route', () => {
   expect(route).toStrictEqual({
     params: {},
     route: {
-      handler,
+      handlers: [handler],
       method: 'GET',
       path: '/posts',
     },
@@ -48,7 +48,7 @@ test('ignores query string when matching route', () => {
   expect(route).toStrictEqual({
     params: {},
     route: {
-      handler,
+      handlers: [handler],
       method: 'GET',
       path: '/posts',
     },
@@ -68,7 +68,7 @@ test('matches URL with query string 2', () => {
       postId: '1',
     },
     route: {
-      handler,
+      handlers: [handler],
       method: 'GET',
       path: '/posts/:postId/comments/:commentId',
     },

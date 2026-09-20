@@ -41,3 +41,11 @@ test('rejects when the request emits an error', async () => {
 
   await expect(readBody(request)).rejects.toBe(error);
 });
+
+test('rejects when the body exceeds the limit', async () => {
+  const request = Readable.from(['hello']) as IncomingMessage;
+
+  await expect(readBody(request, 3)).rejects.toMatchObject({
+    statusCode: 413,
+  });
+});

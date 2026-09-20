@@ -5,70 +5,66 @@ import {
   createServer,
 } from 'node:http';
 
+import { dispatch } from './dispatcher.js';
+import { HttpError } from './errors.js';
+import { DEFAULT_BODY_LIMIT } from './read-body.js';
 import { NoxRequest } from './request.js';
 import { NoxResponse } from './response.js';
 import { Router } from './router.js';
-import type { IRouter, RoutePath, Handler, RouteMethod } from './types.js';
+import type { Handler, IRouter, RouteMethod, RoutePath } from './types.js';
 
 const NOT_FOUND_CODE = 404;
 const INTERNAL_SERVER_ERROR = 500;
-const FIRST_HANDLER_INDEX = 0;
+export interface NoxOptions {
+  bodyLimit?: number;
+}
 
 export class Nox {
   private readonly server: Server;
   private readonly router: IRouter;
+  private readonly bodyLimit: number;
 
-  public constructor() {
-    this.server = createServer((req, res) => this.handleRequest(req, res));
-
+  public constructor(options: NoxOptions = {}) {
+    this.bodyLimit = options.bodyLimit ?? DEFAULT_BODY_LIMIT;
+    this.server = createServer((req, res) => {
+      this.handleRequest(req, res).catch(console.error);
+    });
     this.router = new Router();
   }
 
-  private handleRequest(req: IncomingMessage, res: ServerResponse): void {
+  private async handleRequest(
+    req: IncomingMessage,
+    rawResponse: ServerResponse,
+  ): Promise<void> {
     const matchedRoute = this.router.match(req.method as RouteMethod, req.url);
+    const response = new NoxResponse(rawResponse);
 
     if (!matchedRoute) {
-      const response = new NoxResponse(res);
-
-      response.status(NOT_FOUND_CODE);
-      response.text('Not Found');
-
+      response.status(NOT_FOUND_CODE).text('Not Found');
       return;
     }
 
-    const request = new NoxRequest(req, matchedRoute.params);
-    const response = new NoxResponse(res);
+    const request = new NoxRequest(req, matchedRoute.params, this.bodyLimit);
 
-    const execute = async (index: number): Promise<void> => {
-      const handler = matchedRoute.route.handlers[index];
-      const STEP_VALUE = 1;
+    try {
+      await dispatch(matchedRoute.route.handlers, request, response);
+    } catch (error) {
+      Nox.handleError(error, response);
+    }
+  }
 
-      if (!handler) {
-        return;
-      }
+  private static handleError(error: unknown, response: NoxResponse): void {
+    if (response.headersSent || response.writableEnded) {
+      return;
+    }
 
-      const next = (): void => {
-        execute(index + STEP_VALUE);
-      };
+    if (error instanceof HttpError) {
+      response.status(error.statusCode).text(error.message);
+      return;
+    }
 
-      try {
-        const result = handler(request, response, next);
-
-        Promise.resolve(result).catch((error) => {
-          console.error(error);
-
-          response.status(INTERNAL_SERVER_ERROR);
-          response.text('Internal Server Error');
-        });
-      } catch (error) {
-        console.error(error);
-
-        response.status(INTERNAL_SERVER_ERROR);
-        response.text('Internal Server Error');
-      }
-    };
-
-    execute(FIRST_HANDLER_INDEX);
+    console.error(error);
+    response.status(INTERNAL_SERVER_ERROR).text('Internal Server Error');
   }
 
   public get(path: RoutePath, ...handlers: Handler[]): void {
@@ -93,5 +89,18 @@ export class Nox {
 
   public listen(port?: number): void {
     this.server.listen(port);
+  }
+
+  public close(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.server.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve();
+      });
+    });
   }
 }

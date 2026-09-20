@@ -27,3 +27,11 @@ test('returns undefined for different static segment', () => {
 test('returns undefined for different segment count', () => {
   expect(matchPath('/posts/:id', '/posts/42/comments')).toBeUndefined();
 });
+
+test('uses URL separators on every platform', () => {
+  expect(matchPath('/posts/:id', '/posts/42')).toStrictEqual({ id: '42' });
+});
+
+test('does not treat an empty segment as a parameter', () => {
+  expect(matchPath('/posts/:id', '/posts/')).toBeUndefined();
+});

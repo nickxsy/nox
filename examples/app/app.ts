@@ -10,21 +10,20 @@ const loggerMiddleware = (
   req: NoxRequest,
   res: NoxResponse,
   next: NextFunction,
-): void => {
+): Promise<void> => {
   console.log('NextFunction');
 
-  throw new Error('loggerMiddleware error');
-  next();
+  return next();
 };
 
 const requestIdMiddleware = (
   req: NoxRequest,
   res: NoxResponse,
   next: NextFunction,
-): void => {
+): Promise<void> => {
   req.locals.requestId = crypto.randomUUID();
 
-  next();
+  return next();
 };
 
 app.get('/users', (req, res) => {
@@ -35,17 +34,8 @@ app.get(
   '/posts',
   loggerMiddleware,
   requestIdMiddleware,
-  async (
-    req: NoxRequest<
-      Record<string, string>,
-      any,
-      { id: string; name: string },
-      URLSearchParams
-    >,
-    res: NoxResponse,
-    next,
-  ): Promise<void> => {
-    const body = await req.body();
+  async (req: NoxRequest, res: NoxResponse, _next): Promise<void> => {
+    const body = (await req.body()) as { id: number; name: string };
     const reqId = req.locals.requestId;
 
     res.json({ id: body.id, name: body.name, reqId });

@@ -12,44 +12,28 @@ import type {
 export class Router implements IRouter {
   private readonly routes: Route[] = [];
 
+  private add(method: RouteMethod, path: RoutePath, handlers: Handler[]): void {
+    this.routes.push({ handlers, method, path });
+  }
+
   public get(path: RoutePath, ...handlers: Handler[]): void {
-    this.routes.push({
-      handlers,
-      method: 'GET',
-      path,
-    });
+    this.add('GET', path, handlers);
   }
 
   public post(path: RoutePath, ...handlers: Handler[]): void {
-    this.routes.push({
-      handlers,
-      method: 'POST',
-      path,
-    });
+    this.add('POST', path, handlers);
   }
 
   public put(path: RoutePath, ...handlers: Handler[]): void {
-    this.routes.push({
-      handlers,
-      method: 'PUT',
-      path,
-    });
+    this.add('PUT', path, handlers);
   }
 
   public patch(path: RoutePath, ...handlers: Handler[]): void {
-    this.routes.push({
-      handlers,
-      method: 'PATCH',
-      path,
-    });
+    this.add('PATCH', path, handlers);
   }
 
   public delete(path: RoutePath, ...handlers: Handler[]): void {
-    this.routes.push({
-      handlers,
-      method: 'DELETE',
-      path,
-    });
+    this.add('DELETE', path, handlers);
   }
 
   public match(

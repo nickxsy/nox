@@ -1,16 +1,16 @@
 import type { NoxRequest } from './request.js';
 import type { NoxResponse } from './response.js';
 
-type NextFunction = (error?: unknown) => void;
+type NextFunction = () => Promise<void>;
 
 type Handler = (
-  req: NoxRequest<any, any, any, any>,
+  req: NoxRequest,
   res: NoxResponse,
   next: NextFunction,
 ) => void | Promise<void>;
 
 type RouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-type RoutePath = string | RegExp;
+type RoutePath = string;
 
 interface Route {
   method: RouteMethod;
@@ -19,11 +19,11 @@ interface Route {
 }
 
 interface IRouter {
-  get: (path: RoutePath, ...handler: Handler[]) => void | Promise<void>;
-  post: (path: RoutePath, ...handler: Handler[]) => void | Promise<void>;
-  put: (path: RoutePath, ...handler: Handler[]) => void | Promise<void>;
-  patch: (path: RoutePath, ...handler: Handler[]) => void | Promise<void>;
-  delete: (path: RoutePath, ...handler: Handler[]) => void | Promise<void>;
+  get: (path: RoutePath, ...handler: Handler[]) => void;
+  post: (path: RoutePath, ...handler: Handler[]) => void;
+  put: (path: RoutePath, ...handler: Handler[]) => void;
+  patch: (path: RoutePath, ...handler: Handler[]) => void;
+  delete: (path: RoutePath, ...handler: Handler[]) => void;
   match: (
     method: RouteMethod | undefined,
     url: string | undefined,
