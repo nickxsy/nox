@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { matchPath } from './math-path.js';
+import { matchPath } from '../src/server/math-path.js';
 
 test('matches path route with one parameter', () => {
   expect(matchPath('/posts/:id', '/posts/12')).toStrictEqual({

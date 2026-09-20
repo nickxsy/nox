@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Router } from './router.js';
+import { Router } from '../src/server/router.js';
 
 test('matches GET route', () => {
   const router = new Router(),

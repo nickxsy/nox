@@ -4,7 +4,7 @@ import type { Server } from 'node:http';
 import supertest from 'supertest';
 import { afterEach, expect, test } from 'vitest';
 
-import { Nox } from './server.js';
+import { Nox } from '../src/server/server.js';
 
 const servers: Server[] = [];
 

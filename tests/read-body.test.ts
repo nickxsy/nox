@@ -3,7 +3,7 @@ import { Readable } from 'node:stream';
 
 import { expect, test } from 'vitest';
 
-import { readBody } from './read-body.js';
+import { readBody } from '../src/server/read-body.js';
 
 test('reads an empty body', async () => {
   const request = Readable.from([]) as IncomingMessage;
