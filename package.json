@@ -1,7 +1,7 @@
 {
   "name": "nox",
   "version": "0.0.1",
-  "description": "",
+  "description": "Small HTTP server for Node.js written in TypeScript.",
   "keywords": [
     "esm",
     "http",
