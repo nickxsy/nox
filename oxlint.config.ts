@@ -34,6 +34,7 @@ export default defineConfig({
       rules: {
         'eslint/func-style': 'off',
         'eslint/init-declarations': 'off',
+
         'eslint/no-empty-function': 'off',
         'eslint/no-magic-numbers': 'off',
         'eslint/no-ternary': 'off',
@@ -52,6 +53,14 @@ export default defineConfig({
         'vitest/require-top-level-describe': 'off',
       },
     },
+    {
+      files: ['src/server/server.ts'],
+      rules: {
+        'eslint/require-await': 'off',
+        'promise/prefer-await-to-callbacks': 'off',
+        'promise/prefer-await-to-then': 'off',
+      },
+    },
   ],
   plugins: [
     'import',
@@ -63,6 +72,8 @@ export default defineConfig({
     'vitest',
   ],
   rules: {
+    'eslint/id-length': ['error', { min: 1 }],
+    'eslint/no-console': ['error', { allow: ['error'] }],
     'eslint/no-unused-vars': 'error',
     'eslint/one-var': 'off',
     'eslint/sort-imports': 'off',
@@ -71,6 +82,8 @@ export default defineConfig({
     'import/no-nodejs-modules': 'off',
     'import/no-unassigned-import': 'off',
     'import/prefer-default-export': 'off',
+    'max-statements': 'off',
+    'no-async-endpoint-handlers': 'off',
     'oxc/no-async-await': 'off',
     'promise/avoid-new': 'off',
   },

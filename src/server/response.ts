@@ -1,6 +1,6 @@
 import type { ServerResponse } from 'node:http';
 
-export class NoxResponse {
+export class NoxResponse<TBody = unknown> {
   private readonly rawResponse: ServerResponse;
 
   public constructor(rawResponse: ServerResponse) {

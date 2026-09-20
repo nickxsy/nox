@@ -1,0 +1,24 @@
+@host = http://localhost:8080
+
+### GET /users
+GET {{host}}/users
+
+### GET /posts
+GET {{host}}/posts
+
+### GET /posts/:id
+GET {{host}}/posts/1
+
+### GET /posts/:id/comments/:commentId
+GET {{host}}/posts/1/comments/2
+
+### POST /posts
+POST {{host}}/posts
+Content-Type: application/json
+
+{
+  "title": "New post"
+}
+
+### 404 Not Found
+GET {{host}}/unknown

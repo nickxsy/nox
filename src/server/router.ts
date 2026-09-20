@@ -5,48 +5,48 @@ import type {
   MatchedRoute,
   RoutePath,
   Route,
-  RouteHandler,
+  Handler,
   RouteMethod,
 } from './types.js';
 
 export class Router implements IRouter {
   private readonly routes: Route[] = [];
 
-  public get(path: RoutePath, handler: RouteHandler): void {
+  public get(path: RoutePath, ...handlers: Handler[]): void {
     this.routes.push({
-      handler,
+      handlers,
       method: 'GET',
       path,
     });
   }
 
-  public post(path: RoutePath, handler: RouteHandler): void {
+  public post(path: RoutePath, ...handlers: Handler[]): void {
     this.routes.push({
-      handler,
+      handlers,
       method: 'POST',
       path,
     });
   }
 
-  public put(path: RoutePath, handler: RouteHandler): void {
+  public put(path: RoutePath, ...handlers: Handler[]): void {
     this.routes.push({
-      handler,
+      handlers,
       method: 'PUT',
       path,
     });
   }
 
-  public patch(path: RoutePath, handler: RouteHandler): void {
+  public patch(path: RoutePath, ...handlers: Handler[]): void {
     this.routes.push({
-      handler,
+      handlers,
       method: 'PATCH',
       path,
     });
   }
 
-  public delete(path: RoutePath, handler: RouteHandler): void {
+  public delete(path: RoutePath, ...handlers: Handler[]): void {
     this.routes.push({
-      handler,
+      handlers,
       method: 'DELETE',
       path,
     });

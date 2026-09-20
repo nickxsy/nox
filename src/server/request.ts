@@ -2,9 +2,16 @@ import type { IncomingHttpHeaders, IncomingMessage } from 'node:http';
 import { type URLSearchParams, URL } from 'node:url';
 
 import { URL_BASE } from './constants.js';
+import { parseBody } from './parse-body.js';
 import { readBody } from './read-body.js';
 
-export class NoxRequest {
+export class NoxRequest<
+  TParams = Record<string, string>,
+  TResBody = unknown,
+  TReqBody = unknown,
+  TQuery = URLSearchParams,
+> {
+  public readonly locals: Record<string, string> = {};
   private readonly req: IncomingMessage;
   private readonly urlObject: URL;
   private readonly routeParams: Record<string, string>;
@@ -34,21 +41,20 @@ export class NoxRequest {
     return this.urlObject.pathname;
   }
 
-  public get query(): URLSearchParams {
-    return this.urlObject.searchParams;
+  public get query(): TQuery {
+    return this.urlObject.searchParams as TQuery;
   }
 
   public get contentType(): string | undefined {
     return this.req.headers['content-type'];
   }
 
-  public get params(): Record<string, string> {
-    return this.routeParams;
+  public get params(): TParams {
+    return this.routeParams as TParams;
   }
 
-  public async body(): Promise<unknown> {
+  public async body(): Promise<TReqBody> {
     const body = await readBody(this.req);
-
-    return body;
+    return parseBody<TReqBody>(this.req, body);
   }
 }
