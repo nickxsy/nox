@@ -17,4 +17,4 @@ const badRequest = (message = 'Bad Request'): HttpError =>
 const payloadTooLarge = (message = 'Payload Too Large'): HttpError =>
   new HttpError(PAYLOAD_TOO_LARGE_CODE, message);
 
-export { HttpError, badRequest, payloadTooLarge };
+export { badRequest, HttpError, payloadTooLarge };
